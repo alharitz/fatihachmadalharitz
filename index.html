@@ -1,0 +1,1435 @@
+ï»¿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatih Achmad Al-Haritz | Cybersecurity Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS RESET & VARIABLES ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0c1210;
+            --bg-secondary: #0a0f0d;
+            --bg-card: #14201a;
+            --bg-card-hover: #1c2e24;
+            --accent: #39ff14;
+            --accent-alt: #00e5ff;
+            --accent-gradient: linear-gradient(135deg, #39ff14, #00e5ff);
+            --text-primary: #e0f0e4;
+            --text-secondary: #8fbf9a;
+            --text-muted: #3d6b4a;
+            --border: #1e3d28;
+            --shadow-glow: 0 0 30px rgba(57, 255, 20, 0.1);
+            --green: #39ff14;
+            --cyan: #00e5ff;
+            --lime: #69f0ae;
+            --amber: #ffd740;
+            --orange: #ff9100;
+            --teal: #64ffda;
+            --radius: 6px;
+            --radius-sm: 4px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Fira Code', 'Share Tech Mono', 'Courier New', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ===== CRT SCANLINE EFFECT (subtle) ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.04) 0px,
+                rgba(0, 0, 0, 0.04) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(57, 255, 20, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+        .orb-1 { width: 500px; height: 500px; background: #39ff14; top: -100px; right: -100px; }
+        .orb-2 { width: 400px; height: 400px; background: #00e5ff; bottom: -50px; left: -100px; animation-delay: -10s; }
+        .orb-3 { width: 350px; height: 350px; background: #ffd740; top: 50%; left: 50%; animation-delay: -5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            padding: 10px 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--accent);
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+        }
+        .nav-logo::before { content: '> '; color: var(--accent-alt); opacity: 0.7; }
+
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent);
+            transition: var(--transition);
+            box-shadow: 0 0 8px var(--accent);
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-links a.active { color: var(--accent); }
+        .nav-links a.active::after {
+            width: 100%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(57, 255, 20, 0.2);
+            height: 2px;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 24px; height: 2px;
+            background: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 6px rgba(57, 255, 20, 0.3);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 48px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.25);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-text .greeting {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+        }
+        .greeting-line {
+            width: 40px; height: 1px;
+            background: var(--accent);
+            box-shadow: 0 0 6px var(--accent);
+        }
+
+        .hero-text h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+
+        .hero-text h1 .highlight {
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.15);
+        }
+
+        .hero-text .role {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+
+        .hero-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 36px;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            text-shadow: 0 0 6px rgba(57, 255, 20, 0.3);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.15), inset 0 0 10px rgba(57, 255, 20, 0.05);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: rgba(57, 255, 20, 0.1);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(57, 255, 20, 0.1);
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background: rgba(57, 255, 20, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.15);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-wrapper {
+            position: relative;
+            width: 340px;
+            height: 340px;
+        }
+
+        .photo-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: var(--accent);
+            z-index: 0;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), 0 0 40px rgba(57, 255, 20, 0.08);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), 0 0 40px rgba(57, 255, 20, 0.08); }
+            50% { box-shadow: 0 0 25px rgba(57, 255, 20, 0.5), 0 0 60px rgba(57, 255, 20, 0.15); }
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+            border: 3px solid var(--bg-primary);
+            filter: grayscale(30%) brightness(0.9) contrast(1.1);
+            transition: var(--transition);
+        }
+        .photo-wrapper:hover img {
+            filter: grayscale(0%) brightness(1) contrast(1);
+        }
+
+        .photo-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed var(--border);
+            border-radius: 50%;
+            top: 20px; left: 20px;
+            z-index: -1;
+            animation: spin-slow 30s linear infinite;
+        }
+
+        @keyframes spin-slow {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        .about-text {
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            line-height: 1.9;
+        }
+
+        .about-text p + p {
+            margin-top: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-content: start;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .stat-card:nth-child(1) .stat-number { color: var(--green); text-shadow: 0 0 12px rgba(57, 255, 20, 0.4); }
+        .stat-card:nth-child(2) .stat-number { color: var(--cyan); text-shadow: 0 0 12px rgba(0, 229, 255, 0.4); }
+        .stat-card:nth-child(3) .stat-number { color: var(--amber); text-shadow: 0 0 12px rgba(255, 215, 64, 0.4); }
+        .stat-card:nth-child(4) .stat-number { color: var(--teal); text-shadow: 0 0 12px rgba(100, 255, 218, 0.4); }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== SKILLS ===== */
+        .skills-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: var(--transition);
+        }
+
+        .skill-category:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .skill-category-icon {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+
+        .skill-category h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .skill-category:nth-child(1) h3 { color: var(--green); }
+        .skill-category:nth-child(2) h3 { color: var(--cyan); }
+        .skill-category:nth-child(3) h3 { color: var(--amber); }
+        .skill-category:nth-child(4) h3 { color: var(--teal); }
+
+        .skill-category:nth-child(1):hover { border-color: var(--green); box-shadow: 0 0 20px rgba(57, 255, 20, 0.15); }
+        .skill-category:nth-child(2):hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
+        .skill-category:nth-child(3):hover { border-color: var(--amber); box-shadow: 0 0 20px rgba(255, 215, 64, 0.15); }
+        .skill-category:nth-child(4):hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(100, 255, 218, 0.15); }
+
+        .skill-category .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            padding: 6px 14px;
+            background: rgba(57, 255, 20, 0.06);
+            border: 1px solid rgba(57, 255, 20, 0.18);
+            border-radius: 2px;
+            color: var(--lime);
+            transition: var(--transition);
+        }
+
+        .skill-category:nth-child(1) .skill-tag { color: var(--green); border-color: rgba(57, 255, 20, 0.2); }
+        .skill-category:nth-child(2) .skill-tag { color: var(--cyan); border-color: rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.06); }
+        .skill-category:nth-child(3) .skill-tag { color: var(--amber); border-color: rgba(255, 215, 64, 0.2); background: rgba(255, 215, 64, 0.06); }
+        .skill-category:nth-child(4) .skill-tag { color: var(--teal); border-color: rgba(100, 255, 218, 0.2); background: rgba(100, 255, 218, 0.06); }
+
+        .skill-tag:hover {
+            background: rgba(57, 255, 20, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.15);
+        }
+
+        /* ===== EXPERIENCE ===== */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--green), var(--cyan), var(--teal), transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .timeline-item:last-child { margin-bottom: 0; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -46px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(57, 255, 20, 0.3);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-role {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .timeline-company {
+            font-size: 1rem;
+            color: var(--cyan);
+            font-weight: 500;
+        }
+
+        .timeline-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 4px 12px;
+            background: var(--bg-card);
+            border-radius: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .timeline-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 16px 0 8px;
+        }
+
+        .project-title:first-of-type {
+            margin-top: 12px;
+        }
+
+        .timeline-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .timeline-content li {
+            position: relative;
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 6px;
+        }
+
+        .timeline-content li::before {
+            content: '\25B9';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* ===== EDUCATION ===== */
+        .education-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .edu-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edu-card:nth-child(1)::before { background: var(--cyan); box-shadow: 0 0 8px rgba(0, 229, 255, 0.3); }
+        .edu-card:nth-child(2)::before { background: var(--amber); box-shadow: 0 0 8px rgba(255, 215, 64, 0.3); }
+
+        .edu-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+        }
+
+        .edu-card:nth-child(1):hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0, 229, 255, 0.12); }
+        .edu-card:nth-child(2):hover { border-color: var(--amber); box-shadow: 0 0 20px rgba(255, 215, 64, 0.12); }
+        .edu-card:nth-child(3):hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(100, 255, 218, 0.12); }
+        .edu-card:nth-child(3)::before { background: var(--teal); box-shadow: 0 0 8px rgba(100, 255, 218, 0.3); }
+        .edu-card:nth-child(3) .degree { color: var(--teal); }
+
+        .edu-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .edu-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .edu-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .edu-card .degree {
+            color: var(--lime);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .edu-card:nth-child(1) .degree { color: var(--cyan); }
+        .edu-card:nth-child(2) .degree { color: var(--amber); }
+
+        .edu-card .edu-details {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-top: 8px;
+        }
+
+        /* ===== RESEARCH ===== */
+        .research-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .research-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--green), var(--cyan), var(--amber));
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+        }
+
+        .research-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .research-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .research-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .research-card li {
+            position: relative;
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .research-card li::before {
+            content: '\25B9';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .research-links {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .research-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.18);
+            border-radius: var(--radius-sm);
+            color: var(--cyan);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .research-link:hover {
+            background: rgba(0, 229, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: var(--transition);
+            min-width: 220px;
+        }
+
+        .contact-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .contact-card-icon {
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(57, 255, 20, 0.06);
+            border-radius: 4px;
+        }
+
+        .contact-card:nth-child(1) .contact-card-icon { background: rgba(57, 255, 20, 0.08); }
+        .contact-card:nth-child(2) .contact-card-icon { background: rgba(0, 229, 255, 0.08); }
+        .contact-card:nth-child(3) .contact-card-icon { background: rgba(255, 215, 64, 0.08); }
+        .contact-card:nth-child(1):hover { border-color: var(--green); box-shadow: 0 0 20px rgba(57, 255, 20, 0.12); }
+        .contact-card:nth-child(2):hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0, 229, 255, 0.12); }
+        .contact-card:nth-child(3):hover { border-color: var(--amber); box-shadow: 0 0 20px rgba(255, 215, 64, 0.12); }
+
+        .contact-card-info {
+            text-align: left;
+        }
+
+        .contact-card-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-card-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 32px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ===== FADE IN ANIMATION ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            .hero-text { order: 2; }
+            .hero-image { order: 1; }
+            .hero-text h1 { font-size: 2.4rem; }
+            .hero-text p { margin-left: auto; margin-right: auto; }
+            .hero-buttons { justify-content: center; }
+            .about-grid { grid-template-columns: 1fr; }
+            .education-cards { grid-template-columns: 1fr; }
+            .section-title { font-size: 2rem; }
+            .photo-wrapper { width: 260px; height: 260px; }
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 12px 20px; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0; right: 0;
+                background: rgba(10, 10, 10, 0.97);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 20px;
+                gap: 16px;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .hamburger { display: flex; }
+            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+            section { padding: 60px 0; }
+            .hero-text h1 { font-size: 2rem; }
+            .hero-text .role { font-size: 1.05rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .skills-categories { grid-template-columns: 1fr; }
+            .container { padding: 0 16px; }
+            .photo-wrapper { width: 200px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-logo">Fatih Achmad Al-Haritz</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#community">Community</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#hobbies">Hobbies</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="greeting">
+                        <span class="greeting-line"></span>
+                        root@portfolio:~$ whoami
+                    </div>
+                    <h1>Fatih Achmad<br><span class="highlight">Al-Haritz</span></h1>
+                    <p class="role">Cyber Intelligence Officer</p>
+                    <p>Security engineer and red teamer with hands-on experience in penetration testing, vulnerability assessment, threat intelligence, and security tooling. Passionate about breaking systems to build stronger defenses.</p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Get in Touch
+                        </a>
+                        <a href="https://linkedin.com/in/fatih-achmad-al-haritz-6bb952269/" target="_blank" class="btn btn-outline">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="photo-wrapper">
+                        <img src="photo.jpg" alt="Fatih Achmad Al-Haritz" />
+                        <div class="photo-decoration"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// cat about.txt</p>
+                <h2 class="section-title">Who I Am</h2>
+            </div>
+            <div class="about-grid fade-in">
+                <div class="about-text">
+                    <p>I am a fresh graduate cybersecurity student from Binus University who is thrilled and passionate about cybersecurity. Since childhood, I have enjoyed exploring and experimenting with computers, which naturally led me to the world of cybersecurity.</p>
+                    <p>The evolving nature of cyber warfare has sparked my interest in understanding how attackers compromise and exfiltrate company data, and how organizations continuously strengthen their defenses to protect the internet, motivating me to pursue specialization in this field.</p>
+                    <p>During my studies, I have completed various projects related to cybersecurity, including network and mobile penetration testing, secure programming, threat modelling, DevSecOps, reverse engineering, forensics, and blockchain.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Projects Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1+</div>
+                        <div class="stat-label">Year Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Research Paper</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Red</div>
+                        <div class="stat-label">Team Focus</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// ls skills/</p>
+                <h2 class="section-title">What I Work With</h2>
+            </div>
+            <div class="skills-categories fade-in">
+                <div class="skill-category">
+                    <div class="skill-category-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent);">[OFFSEC]</div>
+                    <h3>Red Teaming & Offensive Security</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Penetration Testing</span>
+                        <span class="skill-tag">Vulnerability Assessment</span>
+                        <span class="skill-tag">Network Attacks</span>
+                        <span class="skill-tag">Web App Exploitation</span>
+                        <span class="skill-tag">Social Engineering</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent);">[INTEL]</div>
+                    <h3>Threat Intelligence & OSINT</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">CTI Tools</span>
+                        <span class="skill-tag">OSINT</span>
+                        <span class="skill-tag">Threat Hunting</span>
+                        <span class="skill-tag">Dark Web Monitoring</span>
+                        <span class="skill-tag">Domain Permutation</span>
+                        <span class="skill-tag">Phishing Analysis</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent);">[SECENG]</div>
+                    <h3>Security Engineering</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">SOC Operations</span>
+                        <span class="skill-tag">DMARC / SPF</span>
+                        <span class="skill-tag">Firewall Management</span>
+                        <span class="skill-tag">DevSecOps</span>
+                        <span class="skill-tag">Secure Programming</span>
+                        <span class="skill-tag">Forensics</span>
+                        <span class="skill-tag">Threat Modelling</span>
+                        <span class="skill-tag">Security Automation</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent);">[DEV]</div>
+                    <h3>Development</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Web Portals</span>
+                        <span class="skill-tag">API Development</span>
+                        <span class="skill-tag">Cloud Services</span>
+                        <span class="skill-tag">Dashboard Dev</span>
+                        <span class="skill-tag">LLM Integration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// cat experience.log</p>
+                <h2 class="section-title">Where I've Worked</h2>
+            </div>
+            <div class="timeline fade-in">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <div>
+                            <div class="timeline-role">Cyber Intelligence Officer Intern</div>
+                            <div class="timeline-company">PT Bank Central Asia, Tbk &mdash; SOC Team</div>
+                        </div>
+                        <span class="timeline-date">Feb 2025 &mdash; Present</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="project-title">[>] Cyber Threat Intelligence Platform</p>
+                        <ul>
+                            <li>Evaluated enterprise and open-source CTI tools, comparing capabilities with existing BCA tools and producing comprehensive reports.</li>
+                            <li>Developed CTI API services on cloud platform, migrating to advanced backend tech with full API documentation for security team integration.</li>
+                            <li>Built a web portal integrating multiple CTI tools &mdash; analysts query phone numbers, domains, or IPs and view consolidated results in a clear format.</li>
+                        </ul>
+
+                        <p class="project-title">[>] Security Configuration Assessment</p>
+                        <ul>
+                            <li>Conducted DDoS, DHCP Starvation, DHCP Poisoning, and ARP Poisoning attack simulations on network switches.</li>
+                            <li>Documented results and retested updated configurations to create hardened switch setups.</li>
+                        </ul>
+
+                        <p class="project-title">[>] Penetration Testing</p>
+                        <ul>
+                            <li>Validated reported vulnerabilities on vendor job application website and discovered additional injection points.</li>
+                            <li>Produced penetration testing reports and performed re-testing to verify remediation.</li>
+                        </ul>
+
+                        <p class="project-title">[>] Dashboard Development</p>
+                        <ul>
+                            <li>Developed phishing reporting dashboard with takedown workflow capabilities.</li>
+                            <li>Built firewall IP blocklist dashboard with change tracking and accountability.</li>
+                            <li>Created DMARC report dashboard with interactive charts, filtering, and detailed record tables.</li>
+                        </ul>
+
+                        <p class="project-title">[>] Threat Intelligence & OSINT</p>
+                        <ul>
+                            <li>Explored domain permutation tools and analyzed source code for malware potential.</li>
+                            <li>Analyzed and reported phishing websites and social media impersonating BCA for takedown.</li>
+                            <li>Conducted OSINT to verify reported breaches and gather intelligence on threat actors.</li>
+                            <li>Developed SPF configuration guidelines for subsidiaries aligned with best practices.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Experience Section -->
+    <section id="community">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// Community</p>
+                <h2 class="section-title">Community Experience</h2>
+            </div>
+            <div class="timeline fade-in">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <div>
+                            <div class="timeline-role">Coordinator &mdash; Media & Publication</div>
+                            <div class="timeline-company">Cybersecurity Community, Binus University</div>
+                        </div>
+                    </div>
+                    <div class="timeline-content">
+                        <ul>
+                            <li>Led the media and publication division, coordinating content creation and public communications for the cybersecurity community.</li>
+                            <li>Managed social media presence and published educational cybersecurity content to raise awareness among students.</li>
+                            <li>Organized and promoted cybersecurity events, workshops, and competitions within the university.</li>
+                            <li>Collaborated with other divisions to produce documentation, reports, and promotional materials for community activities.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- University Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// University Projects</p>
+                <h2 class="section-title">Academic Projects</h2>
+            </div>
+            <div class="skills-categories fade-in">
+                <div class="skill-category">
+                    <div class="skill-category-icon">[01]</div>
+                    <h3>Network Penetration Testing</h3>
+                    <p class="project-desc">Performed end-to-end network penetration testing on simulated enterprise environments. Conducted reconnaissance and network scanning to identify live hosts and open services, exploited discovered vulnerabilities to gain unauthorized access, performed lateral movement and privilege escalation during post-exploitation, and compiled detailed findings into a structured penetration testing report with remediation recommendations.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Network Scanning</span>
+                        <span class="skill-tag">Exploitation</span>
+                        <span class="skill-tag">Post-Exploitation</span>
+                        <span class="skill-tag">Reporting</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon">[02]</div>
+                    <h3>Mobile Penetration Testing</h3>
+                    <p class="project-desc">Conducted security assessment on Android mobile applications by performing static and dynamic analysis. Decompiled APKs to review source code for hardcoded credentials and insecure configurations, intercepted and analyzed network traffic to identify API vulnerabilities, tested for insecure data storage and improper authentication mechanisms, and documented all findings with severity ratings and suggested fixes.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Android Security</span>
+                        <span class="skill-tag">App Analysis</span>
+                        <span class="skill-tag">API Testing</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon">[03]</div>
+                    <h3>Threat Modelling</h3>
+                    <p class="project-desc">Applied structured threat modelling methodologies to analyze and identify potential security threats in software systems. Used the STRIDE framework to systematically categorize threats such as spoofing, tampering, and elevation of privilege. Constructed attack trees to visualize threat scenarios and their potential impact, performed risk assessment to prioritize threats based on likelihood and severity, and produced a comprehensive threat model document with recommended countermeasures.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">STRIDE</span>
+                        <span class="skill-tag">Attack Trees</span>
+                        <span class="skill-tag">Risk Assessment</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <div class="skill-category-icon">[04]</div>
+                    <h3>Digital Forensics</h3>
+                    <p class="project-desc">Performed digital forensic investigations on disk images and memory dumps to reconstruct events and uncover evidence of malicious activity. Analyzed file systems to recover deleted files and examine artifacts, conducted memory forensics to identify running processes and extract indicators of compromise, followed proper chain-of-custody procedures for evidence handling, and compiled forensic investigation reports with a clear timeline of events and conclusions.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Disk Forensics</span>
+                        <span class="skill-tag">Memory Forensics</span>
+                        <span class="skill-tag">Evidence Analysis</span>
+                        <span class="skill-tag">Incident Response</span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 48px;" class="fade-in">
+                <a href="https://onedrive.live.com/?cid=c7003e944c36afa4&id=C7003E944C36AFA4!s2eb6a4c459b94df78569d1e57b898879&resid=C7003E944C36AFA4!s2eb6a4c459b94df78569d1e57b898879&ithint=folder&e=bgbcm4&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL2YvYy9jNzAwM2U5NDRjMzZhZmE0L0lnREVwTFl1dVZuM1RZVnAwZVY3aVloNUFiZ01zdlFObG52XzB3dzVxeS1JNS1zP2U9YmdiY200" target="_blank" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    View Full Project Portfolio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// cat education.log</p>
+                <h2 class="section-title">Academic Background</h2>
+            </div>
+            <div class="education-cards fade-in">
+                <div class="edu-card">
+                    <div class="edu-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--accent);">[EDU]</div>
+                    <h3>Binus University</h3>
+                    <div class="degree">Bachelor of Computer Science</div>
+                    <div class="edu-details">
+                        Major: Computer Science<br>
+                        Minor: Cyber Security<br>
+                        Jakarta, DKI Jakarta<br>
+                        Expected June 2026
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 1.2rem; color: var(--amber);">[SMA]</div>
+                    <h3>SMA Trensains Tebuireng</h3>
+                    <div class="degree">Science Class</div>
+                    <div class="edu-details">
+                        Jombang, East Java<br>
+                        2019 &mdash; 2022
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// cat research.log</p>
+                <h2 class="section-title">Published Work</h2>
+            </div>
+            <div class="research-card fade-in">
+                <h3>An End-to-End On-Prem Vulnerability Assessment Framework Using Hybrid CPE Matching and Structured Mitigation Generation</h3>
+                <ul>
+                    <li>Built an on-premises vulnerability assessment framework that inventories host software and correlates findings with CVE/NVD data.</li>
+                    <li>Developed hybrid CPE matching combining deterministic string matching with self-hosted LLM-assisted vendor/product resolution for accurate CPE identifiers.</li>
+                    <li>Generated structured remediation guidance using self-hosted LLM with fallback mechanism for non-technical users.</li>
+                    <li>Paper explains how to implement the framework in real-life enterprise networks.</li>
+                    <li>Presented at ICCSP '26 &mdash; 12th International Conference on Communication and Signal Processing.</li>
+                </ul>
+                <div class="research-links">
+                    <a href="https://edas.info/showPaper.php?m=1571237177" target="_blank" class="research-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        EDAS Page
+                    </a>
+                    <a href="https://bit.ly/469NUwf" target="_blank" class="research-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Read Paper
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies Section -->
+    <section id="hobbies">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// Hobbies</p>
+                <h2 class="section-title">When I'm Not Hacking</h2>
+            </div>
+            <div class="education-cards fade-in">
+                <div class="edu-card">
+                    <div class="edu-icon" style="font-size: 1.5rem; font-family: 'Share Tech Mono', monospace; color: var(--cyan);">[&#9834;]</div>
+                    <h3>Music</h3>
+                    <div class="edu-details">
+                        Enjoy listening to and exploring various genres of music. Music helps me stay focused during long coding and hacking sessions.
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon" style="font-size: 1.5rem; font-family: 'Share Tech Mono', monospace; color: var(--amber);">[>_]</div>
+                    <h3>Cybersecurity</h3>
+                    <div class="edu-details">
+                        Beyond work, I enjoy exploring CTF challenges and staying up-to-date with the latest vulnerabilities and exploits.
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon" style="font-size: 1.5rem; font-family: 'Share Tech Mono', monospace; color: var(--teal);">[&#9889;]</div>
+                    <h3>Technology</h3>
+                    <div class="edu-details">
+                        Passionate about emerging tech &mdash; from new hardware to AI advancements.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">// ping contact</p>
+                <h2 class="section-title" style="text-align:center;">Let's Connect</h2>
+            </div>
+            <div class="contact-content fade-in">
+                <p>I'm always open to discussing cybersecurity, new opportunities, or interesting projects. Feel free to reach out!</p>
+                <div class="contact-links">
+                    <a href="mailto:fatihachmadalharitz@gmail.com" class="contact-card">
+                        <span class="contact-card-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--accent);">[@]</span>
+                        <div class="contact-card-info">
+                            <div class="contact-card-label">Email</div>
+                            <div class="contact-card-value">fatihachmadalharitz@gmail.com</div>
+                        </div>
+                    </a>
+                    <a href="https://linkedin.com/in/fatih-achmad-al-haritz-6bb952269/" target="_blank" class="contact-card">
+                        <span class="contact-card-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--accent);">[in]</span>
+                        <div class="contact-card-info">
+                            <div class="contact-card-label">LinkedIn</div>
+                            <div class="contact-card-value">Fatih Achmad Al-Haritz</div>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/6285774559020" target="_blank" class="contact-card">
+                        <span class="contact-card-icon" style="font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--accent);">[wa]</span>
+                        <div class="contact-card-info">
+                            <div class="contact-card-label">WhatsApp</div>
+                            <div class="contact-card-value">(+62) 857-7455-9020</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Designed & Built by <a href="#">Fatih Achmad Al-Haritz</a> &copy; 2026</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Fade-in on scroll (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Active nav link on scroll (scroll spy)
+        const sections = document.querySelectorAll('section[id]');
+        const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+        function updateActiveNav() {
+            const scrollPos = window.scrollY + 120;
+            let currentId = '';
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPos) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+            navAnchors.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + currentId) {
+                    a.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+        updateActiveNav();
+
+        // Typing effect for greeting (optional subtle touch)
+        const hero = document.querySelector('.hero');
+        hero.style.opacity = '0';
+        hero.style.transform = 'translateY(20px)';
+        hero.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                hero.style.opacity = '1';
+                hero.style.transform = 'translateY(0)';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
